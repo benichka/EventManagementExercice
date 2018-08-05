@@ -1,10 +1,15 @@
 ﻿using System;
+using EventSubscription.CustomEventArgs;
 using EventSubscription.Model;
 
 namespace EventSubscription
 {
     /// <summary>
-    /// Entry point.
+    /// Entry point.<para />
+    /// Based on https://docs.microsoft.com/en-gb/dotnet/standard/events/how-to-raise-and-consume-events. <para />
+    /// Further reading:
+    /// https://codeblog.jonskeet.uk/2015/01/30/clean-event-handlers-invocation-with-c-6/;
+    /// https://blogs.msdn.microsoft.com/ericlippert/2009/04/29/events-and-races/.
     /// </summary>
     class Program
     {
@@ -17,9 +22,9 @@ namespace EventSubscription
             machine.VendingMachineNotification += HandleVendingMachineNotification;
 
             // Fill the machine with coffee!
-            var coffee1 = new Coffee("Coffee 1", "Arusha", "Tanzania", Coffee.CoffeeStrength.Decaf);
-            var coffee2 = new Coffee("Coffee 2", "Bergendal", "Indonesia", Coffee.CoffeeStrength.Standard);
-            var coffee3 = new Coffee("Coffee 3", "Bourbon", "Réunion", Coffee.CoffeeStrength.Strong);
+            var coffee1 = new Coffee("Decaffeinato", "Arabica", "Colombia", Coffee.CoffeeStrength.Decaf);
+            var coffee2 = new Coffee("Classico", "Arabica", "Ethiopia", Coffee.CoffeeStrength.Standard);
+            var coffee3 = new Coffee("Forte", "Robusta", "Réunion", Coffee.CoffeeStrength.Strong);
 
             var slot1 = new CoffeeSlot(coffee1);
             var slot2 = new CoffeeSlot(coffee2);
@@ -39,17 +44,17 @@ namespace EventSubscription
 
                 // At the 10th coffee (the limit is 5 by default), the event OutOfBeans will be raised
                 // and the method machine.HandleOutOfBeans will be invoked.
-                machine.MakeCoffee("Coffee 1");
+                machine.MakeCoffee("Decaffeinato");
 
                 if (i < 10)
                 {
-                    machine.MakeCoffee("Coffee 3");
+                    machine.MakeCoffee("Forte");
                 }
 
                 if (i == 5)
                 {
                     // This coffee doesn't exist: a message should appear.
-                    machine.MakeCoffee("Coffee 5");
+                    machine.MakeCoffee("Speciale");
                 }
             }
         }
@@ -57,11 +62,14 @@ namespace EventSubscription
         /// <summary>
         /// Event handling for the event VendingMachineNotification.
         /// </summary>
-        /// <param name="vendingMachine">Vending machine that raised the event.</param>
+        /// <param name="sender">Object that raised the event.</param>
         /// <param name="message">The message that the vending machine sent.</param>
-        private static void HandleVendingMachineNotification(VendingMachine vendingMachine, string message)
+        private static void HandleVendingMachineNotification(object sender, VendingMachineNotificationEventArgs e)
         {
-            Console.WriteLine(message);
+            // In our case, we know that the sender is a VendingMachine, but we don't need information
+            // from this particular vending machine in our handler.
+
+            Console.WriteLine(e.Message);
         }
     }
 }

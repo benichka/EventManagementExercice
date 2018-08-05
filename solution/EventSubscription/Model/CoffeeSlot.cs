@@ -13,13 +13,16 @@ namespace EventSubscription.Model
         /// <summary>Default stock level of a coffee to put in a slot.</summary>
         private static readonly int defautRefillStockLevel = 15;
 
-        /// <summary>Default minimum stock level.</summary>
+        /// <summary>
+        /// Default minimum stock level When the slot. When the slot reaches
+        /// this level, no coffee can be made anymore.
+        /// </summary>
         private static readonly int defaultMinimumStockLevel = 5;
         #endregion statics
 
         #region event and delegate
-        /// <summary>Handler for the OutOfBeansHandler event.</summary>
-        public delegate void OutOfBeansHandler(CoffeeSlot coffeeSlot);
+        /// <summary>Handler for the OutOfBeans event.</summary>
+        public delegate void OutOfBeansHandler(object sender, EventArgs e);
 
         /// <summary>Event raised when the slot is going low on beans.</summary>
         public event OutOfBeansHandler OutOfBeans;
@@ -66,7 +69,7 @@ namespace EventSubscription.Model
         }
 
         /// <summary>
-        /// Default constructor for a single coffee.
+        /// Constructor based on a coffee.
         /// </summary>
         /// <param name="coffee">The coffee to store in the slot.</param>
         public CoffeeSlot(Coffee coffee)
@@ -93,17 +96,17 @@ namespace EventSubscription.Model
                 // Decrement the stock level.
                 CurrentStockLevel--;
 
-                // If the stock level reach the minimum, raise the event.
+                // If the stock level reaches the minimum, raise the event.
                 if (CurrentStockLevel == MinimumStockLevel)
                 {
                     // Check whether the event is null.
                     // Raise the event.
-                    OutOfBeans?.Invoke(this);
+                    OutOfBeans?.Invoke(this, EventArgs.Empty);
                 }
             }
             else
             {
-                throw new OutOfBeansException($"Slot {Number}: I can't make coffee anymore, I'm empty. Please refill!");
+                throw new OutOfBeansException($"Slot {Number} ({CoffeeName}): I can't make coffee anymore, I'm empty. Please refill!");
             }
         }
 
@@ -113,7 +116,7 @@ namespace EventSubscription.Model
         /// <returns>The coffee slot's information.</returns>
         public override string ToString()
         {
-            return $"Slot {Number}: " + Coffee.ToString();
+            return $"Slot {Number} ({CoffeeName}): " + Coffee.ToString();
         }
     }
 }

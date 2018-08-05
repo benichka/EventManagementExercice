@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using EventSubscription.CustomExceptions;
 
@@ -11,11 +10,13 @@ namespace EventSubscription.Model
     public class VendingMachine
     {
         #region event and delegate
-        /// <summary>Handler for the VendingMachineNotificationHandler event.</summary>
-        public delegate void VendingMachineNotificationHandler(VendingMachine vendingMachine, string message);
+        // TODO: step 06:
+        // Create the custom handler that will be used when the vending machine needs to notify the user.
+        // Name it VendingMachineNotificationHandler. Use the VendingMachineNotificationEventArgs as argument.
 
-        /// <summary>Event raised whenener the machine wants to notify its user of something.</summary>
-        public event VendingMachineNotificationHandler VendingMachineNotification;
+
+        // TODO: step 07:
+        // Create the event based on the handler. Name it VendingMachineNotification.
         #endregion event and delegate
 
         #region properties
@@ -26,7 +27,6 @@ namespace EventSubscription.Model
         private int slotCounter;
 
         private List<CoffeeSlot> _CoffeeSlots;
-
         /// <summary>List of coffees that the machine contains.</summary>
         public List<CoffeeSlot> CoffeeSlots
         {
@@ -39,10 +39,9 @@ namespace EventSubscription.Model
                 // For each coffee slot, the vending machine subscribes to the
                 // event OutOfBeans. That way, the vending machine will be notified
                 // whenever a slot reaches its minimum capacity.
-                foreach (var coffeeSlot in _CoffeeSlots)
-                {
-                    coffeeSlot.OutOfBeans += HandleOutOfBeans;
-                }
+
+                // TODO: step 09:
+                // Subscribe to all coffees OutOfBeans event with the appropriate handler.
             }
         }
         #endregion properties
@@ -72,7 +71,9 @@ namespace EventSubscription.Model
             CoffeeSlots.Add(coffeeSlot);
 
             // The vending machine then subscribes to the new coffee slot.
-            coffeeSlot.OutOfBeans += HandleOutOfBeans;
+
+            // TODO: step 10:
+            // Subscribe to the OutOfBeans event of the coffee with the appropriate handler.
         }
 
         /// <summary>
@@ -88,27 +89,26 @@ namespace EventSubscription.Model
                 {
                     selectedCoffee.UseBeans();
 
-                    VendingMachineNotification?.Invoke(this, $"Your coffee {coffeeName} has been made. Enjoy!");
+                    // TODO: step 12a:
+                    // Create a notification with the correct arguments to inform the user that their coffee is made.
                 }
                 catch (OutOfBeansException oobEx)
                 {
-                    VendingMachineNotification?.Invoke(this, oobEx.Message);
+                    // TODO: step 12b:
+                    // Create a notification with the correct arguments relaying the error message contained in the exception.
                 }
             }
             else
             {
-                VendingMachineNotification?.Invoke(this, $"the coffee {coffeeName} is not available in that machine");
+                // TODO: step 11:
+                // Create a notification with the correct arguments to inform the user that the coffee they selected is not available in that machine.
             }
         }
 
-        /// <summary>
-        /// Event handling for the event OutOfBeans.
-        /// </summary>
-        /// <param name="coffeeSlot">Coffee slot that raised the event.</param>
-        private void HandleOutOfBeans(CoffeeSlot coffeeSlot)
-        {
-            VendingMachineNotification?.Invoke(this, $"Vending machine {Name}: coffee {coffeeSlot.CoffeeName} reached its minimum level.");
-        }
+        // TODO: step 08:
+        // Create the method to handle the event OutOfBeans raised by a coffee slot.
+        // In this method, invoke the event VendingMachineNotification to inform of
+        // a coffee shortage in the slot.
 
         /// <summary>
         /// Display the vending machine's information.
