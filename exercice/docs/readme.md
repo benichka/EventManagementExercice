@@ -54,27 +54,27 @@ In the *Main* method, subscribe to the event *VendingMachineNotification* from t
 In this exercice, we used delegate that we created to handle event (*OutOfBeansHandler* and *VendingMachineNotificationHandler*). However, the *.NET Framework* already provides delegates for that.  
 Can you use them for the following cases:
 1. an event that will not provide data:
-```
+```csharp
 public delegate void OutOfBeansHandler(object sender, EventArgs e);
 public event OutOfBeansHandler OutOfBeans;
 ```
 1. an event that will provide data:
-```
+```csharp
 public delegate void VendingMachineNotificationHandler(object sender, VendingMachineNotificationEventArgs e);
 public event VendingMachineNotificationHandler VendingMachineNotification;
 ```
 
 #### Checking the nullity of an event before raising it
 Consider the following code (which is the recommended approach to raise an event):
-```
+```csharp
 OutOfBeansHandler handler = OutOfBeans;
 if (handler != null)
 {
-       handler(this, EventArgs.Empty)
+   handler(this, EventArgs.Empty)
 }
 ```
 Which can also be written (starting with C# 6):
-```
+```csharp
 OutOfBeans?.Invoke(this, EventArgs.Empty);
 ```
 
