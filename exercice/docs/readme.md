@@ -79,4 +79,4 @@ OutOfBeans?.Invoke(this, EventArgs.Empty);
 ```
 
 1. Why do we have to check the nullity of an event before raising it?
-1. In the first scenario, why do we have to locally copy the 
+1. In the first scenario, why do we have to locally copy the event?
