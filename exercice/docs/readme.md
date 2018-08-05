@@ -70,7 +70,7 @@ Consider the following code (which is the recommended approach to raise an event
 OutOfBeansHandler handler = OutOfBeans;
 if (handler != null)
 {
-   handler(this, EventArgs.Empty)
+    handler(this, EventArgs.Empty)
 }
 ```
 Which can also be written (starting with C# 6):
