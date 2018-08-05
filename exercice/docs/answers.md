@@ -3,21 +3,21 @@ Those are the answers for [this](./readme.md).
 ## Going further
 #### Delegate to handle event
 1. an event that will not provide data:
-```
+```csharp
 public delegate void OutOfBeansHandler(object sender, EventArgs e);
 public event OutOfBeansHandler OutOfBeans;
 ```
 can be replaced by:
-```
+```csharp
 public event EventHandler OutOfBeans;
 ```
 1. an event that will provide data:
-```
+```csharp
 public delegate void VendingMachineNotificationHandler(object sender, VendingMachineNotificationEventArgs e);
 public event VendingMachineNotificationHandler VendingMachineNotification;
 ```
 can be replaced by:
-```
+```csharp
 public event EventHandler<VendingMachineNotificationEventArgs> VendingMachineNotification;
 ```
 
